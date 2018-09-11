@@ -2,11 +2,18 @@ import discord
 from discord.ext import commands
 import random
 from random import randint
-recent = [101]
 question = ' '
 answer = ' '
 
+'''These arrays hold the index of jokes used recently'''
+recent = []
+recentCS = []
+recentBar = []
+recentKnock= []
+
+'''this is for the token of the discord bot'''
 token = 'MzgyOTkxNjA1MDcxNzQwOTI4.DPdwXQ.6dmaGr5xNTPifZW9Lci1IoCOTrc'
+
 client = discord.Client()
 
 bot = commands.Bot(command_prefix='#', description='A bot that randomly posts a joke to a discord channel')
@@ -15,7 +22,11 @@ async def on_ready():
     print('Logged in as')
     print(bot.user.name)
 
-
+'''
+***Splits the joke into Question and Answer, based on input of full joke in string
+***This is done by the arbitrary flag Answer123
+***it will check if it is a knock knock joke and send extra aspects accordinly
+'''
 async def splitJoke(fullJoke):
     splitVersion = fullJoke.split('Answer123')
     question = splitVersion[0]
@@ -32,39 +43,96 @@ async def splitJoke(fullJoke):
         await bot.say(question + ' who?')
         await bot.say(answer)
 
-def randomJoke():
-    """Gets a random Joke"""
-    joke = getJoke()
-    return joke
+'''
+***Retrieves a random joke based on command choice
+***ensures the joke is not in the appropriate recent array
+***this array holds an arbitrary value, less than or equal to max
+***this means the joke will not repeat for at least that many calls or a reset
+***opens individual file based on call
+***loops through to get the joke on the line
+'''
+def getJoke(choice):
 
-def getJoke():
-    num = random.randint(1,10)
-    if num not in recent:
-        recent.append(num)
-    else:
-        if len(recent) == 10:
-            recent.pop(0)
-        while (num in recent):
-            num = random.randint(1,10)
-        recent.append(num)
+    num = random.randint(1,20)
+    #Checks the choice sent to the function
+    if choice == 1:
+        #checks to see if the number is in the recent array
+        if num not in recentCS:
+            recentCS.append(num)
+        else:
+            #if length of array is 15 it removes an entry
+            if len(recentCS) == 15:
+                recentCS.pop(0)
+            #loops through and generates number until it is not in the recent array
+            while (num in recentCS):
+                num = random.randint(1,20)
+            #adds the new number to the recent index
+            recentCS.append(num)
+        jokes = open("jokesCS.txt")
+    elif choice == 2:
+        if num not in recentKnock:
+            recentKnock.append(num)
+        else:
+            if len(recentKnock) == 15:
+                recentKnock.pop(0)
+            while (num in recentKnock):
+                num = random.randint(1,20)
+            recentKnock.append(num)
+        jokes = open("jokesKnock.txt")
+    elif choice == 3:
+        num = random.randint(1,10)
+        if num not in recentBar:
+            recentBar.append(num)
+        else:
+            if len(recentBar) == 10:
+                recentBar.pop(0)
+            while (num in recentBar):
+                num = random.randint(1,10)
+                recentBar.append(num)
+        jokes = open("jokesBar.txt")
+        print(num)
     counter = 0
-    jokes = open("jokes.txt")
-    while counter <num:
+    while counter < num:
         fullJoke = jokes.readline()
         counter = counter+1
     return fullJoke
 
+
+'''
+*** gives basic list of commands
+'''
 @bot.command()
 async def info():
     await bot.say("Welcome to the Joke Bot" "\nThis Bot is used for Random Jokes\
     \n\nSome simple commands are:\
-    \n#suggest *text* to suggest a new joke to implement\
-    \n#joke to have a random joke sent to the channel")
+    \n#joke to have a random joke sent to the channel\
+    \n#jokeCS to have a random Computer Science joke sent to the channel\
+    \n#jokeKnock to have a random KnockKnock joke sent to the channel\
+    \n#JokeBar to have a random Bar joke sent to the channel")
 
+'''
+***All general commands and can easily be added or removed
+***sends a number based on command to getJoke call
+'''
 @bot.command()
 async def joke():
-    """Gets a random Joke"""
-    jokeToSplit = getJoke()
+    category = random.randint(1,3)
+    jokeToSplit = getJoke(category)
+    await splitJoke(jokeToSplit)
+
+@bot.command()
+async def jokeCS():
+    jokeToSplit = getJoke(1)
+    await splitJoke(jokeToSplit)
+
+@bot.command()
+async def jokeKnock():
+    jokeToSplit = getJoke(2)
+    await splitJoke(jokeToSplit)
+
+@bot.command()
+async def jokeBar():
+    jokeToSplit = getJoke(3)
     await splitJoke(jokeToSplit)
 
 bot.run(token)
