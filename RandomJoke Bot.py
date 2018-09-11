@@ -6,13 +6,12 @@ question = ' '
 answer = ' '
 
 '''These arrays hold the index of jokes used recently'''
-recent = []
 recentCS = []
 recentBar = []
 recentKnock= []
 
 '''this is for the token of the discord bot'''
-token = 'MzgyOTkxNjA1MDcxNzQwOTI4.DPdwXQ.6dmaGr5xNTPifZW9Lci1IoCOTrc'
+token = 'PLace token here'
 
 client = discord.Client()
 
@@ -136,4 +135,3 @@ async def jokeBar():
     await splitJoke(jokeToSplit)
 
 bot.run(token)
-#https://discordapp.com/api/oauth2/authorize?client_id=382991605071740928&scope=bot&permissions=0
