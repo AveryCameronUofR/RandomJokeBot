@@ -30,11 +30,13 @@ async def splitJoke(fullJoke):
     splitVersion = fullJoke.split('Answer123')
     question = splitVersion[0]
     answer = splitVersion[1]
+    #Checks for KnockKnock keyword indicating knock knock joke
     if 'KnockKnock' not in fullJoke:
         await bot.say(question)
         await bot.say(answer)
     else:
         questionk = question.split('KnockKnock')
+        #splits the joke with knockknock and then splits it again byt answer 
         question = questionk[1]
         await bot.say('Knock Knock')
         await bot.say('Who\'s there?')
@@ -51,7 +53,7 @@ async def splitJoke(fullJoke):
 ***loops through to get the joke on the line
 '''
 def getJoke(choice):
-
+    #base number of jokes in each file (could be in the if statements)
     num = random.randint(1,20)
     #Checks the choice sent to the function
     if choice == 1:
@@ -67,6 +69,7 @@ def getJoke(choice):
                 num = random.randint(1,20)
             #adds the new number to the recent index
             recentCS.append(num)
+        #assigns the jokesCS text file to general variable jokes
         jokes = open("jokesCS.txt")
     elif choice == 2:
         if num not in recentKnock:
@@ -115,8 +118,11 @@ async def info():
 '''
 @bot.command()
 async def joke():
+    #picks a random category if not stated in the command
     category = random.randint(1,3)
+    #gets the joke based on the category
     jokeToSplit = getJoke(category)
+    #splits the joke for message to chat
     await splitJoke(jokeToSplit)
 
 @bot.command()
