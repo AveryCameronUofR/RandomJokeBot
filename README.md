@@ -7,9 +7,9 @@ Jokes can be added or removed by the user at any point
   special caution should be used to maintain the number of jokes it is checking for
 Contaions the following commands
 
-  #Info - for giving help and info of commands
-  #joke - general joke command, will pick from a random category
-  #jokeCS - tells a random computer science related joke
-  #jokeBar - tells a random bar joke
-  #jokeKnock - tells a random knock knock joke
+# Info - for giving help and info of commands
+# joke - general joke command, will pick from a random category
+# jokeCS - tells a random computer science related joke
+# jokeBar - tells a random bar joke
+# jokeKnock - tells a random knock knock joke
   
